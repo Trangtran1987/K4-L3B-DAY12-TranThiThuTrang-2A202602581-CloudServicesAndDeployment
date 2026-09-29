@@ -38,10 +38,10 @@ services:
   agent:
     build: .
     image: day12-agent:prod
-    # Dải cổng để `--scale agent=3` không tranh nhau cổng 8000;
-    # chạy 1 instance thì instance đó nhận 8000.
+    # Mặc định cố định 8000. Khi scale nhiều instance thì mở dải cổng:
+    #     AGENT_PORTS=8000-8002 docker compose up -d --scale agent=3
     ports:
-      - "8000-8002:8000"
+      - "${AGENT_PORTS:-8000}:8000"
     environment:
       AGENT_API_KEY: ${AGENT_API_KEY}   # đọc từ .env, không viết thẳng khóa
       REDIS_URL: redis://redis:6379/0   # `redis` là tên service = hostname
